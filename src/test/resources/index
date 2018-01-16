@@ -1,0 +1,57 @@
+{
+    "properties": {
+        "content": {
+            "type": "text",
+            "analyzer": "ik_max_word"
+        },
+        "createDate": {
+            "type": "date"
+        },
+        "createUserId": {
+            "type": "long"
+        },
+        "htmlFileId": {
+            "type": "text"
+        },
+        "id": {
+            "type": "long"
+        },
+        "tags": {
+            "properties": {
+                "name": {
+                    "type": "text"
+                }
+            }
+        },
+        "title": {
+            "type": "text",
+            "analyzer": "ik_max_word"
+        },
+        "usableStatus": {
+            "type": "integer"
+        }
+    }
+}
+
+
+
+
+{
+    "properties": {
+        "content": {
+            "type": "text",
+        },
+        "createDate": {
+            "type": "date"
+        },
+        "createUserId": {
+            "type": "long"
+        },
+        "id": {
+            "type": "long"
+        },
+        "usableStatus": {
+            "type": "integer"
+        }
+    }
+}

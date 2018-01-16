@@ -1,0 +1,390 @@
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+--
+-- Host: 10.234.138.64    Database: sms
+-- ------------------------------------------------------
+-- Server version	5.7.20-0ubuntu0.16.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `app`
+--
+
+DROP TABLE IF EXISTS `app`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `app` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `APP_DOMAIN` varchar(45) NOT NULL,
+  `CREATE_DATE` datetime DEFAULT NULL,
+  `USABLE_STATUS` int(11) DEFAULT '0',
+  `APP_INDEX` varchar(45) DEFAULT 'N/A',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `app_domain_UNIQUE` (`APP_DOMAIN`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `app`
+--
+
+LOCK TABLES `app` WRITE;
+/*!40000 ALTER TABLE `app` DISABLE KEYS */;
+/*!40000 ALTER TABLE `app` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `blog`
+--
+
+DROP TABLE IF EXISTS `blog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `blog` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `TITLE` varchar(200) NOT NULL,
+  `HTML_FILE_ID` varchar(36) DEFAULT '',
+  `MD_FILE_ID` varchar(36) DEFAULT NULL,
+  `CONTENT` text NOT NULL,
+  `READ_NUM` bigint(32) NOT NULL,
+  `USABLE_STATUS` int(11) NOT NULL DEFAULT '0',
+  `CREATE_USER_ID` bigint(32) NOT NULL DEFAULT '0',
+  `CREATE_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_BLOG_USER` (`CREATE_USER_ID`),
+  CONSTRAINT `FK_BLOG_USER` FOREIGN KEY (`CREATE_USER_ID`) REFERENCES `user` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `blog`
+--
+
+LOCK TABLES `blog` WRITE;
+/*!40000 ALTER TABLE `blog` DISABLE KEYS */;
+INSERT INTO `blog` VALUES (64,'docker部署Elasticsearch集群','400b3a86e1a642e6ab86f68bc053da89','b26bb6772ae04daf881a1b3156902f0e','安装docker 查看官方文档：针对每个系统版本进行安装。不同子网的container之间是默认隔离的，即使他们在同一台机器上面也不能ping通，不同物理机之间的容器也是默认隔离的。所以在weave启动container的时候 集群应用的IP必须在同一个字网下面。10.0.0.1，10.0.0.2，而不能是10.0.0.1，10.0.1.1.\r\n',0,0,1,'2018-01-10 18:01:45'),(65,'Elasticsearch 之 不停服务重建索引','b7d5c73cce974833b84ef4a5b1c1c9a6','d41c82aad0724469b9668e14b3ea872f','当我们在使用Es做为我们应用的全文检索服务器的时候，文档结构避免不了会发生变化，比如增加字段，而且增加的字段需要进行分词时，再比如原来文档结构中的字段类型发生改变了，假设原来的字段类型是String, 而修改后的字段类型是Object，Es是不支持这种直接修改字段类型的。我们能做的可能只有进行重新索引，当然关系型数据库也不支持这种类型字段改变的情况。',0,0,1,'2018-01-10 18:06:46'),(66,'Elasticsearch部署问题（硬盘挂载错乱）','987faf7ccfb446328bb288486fc0d3b1','c2318d9aa5614d27ad800f3e82bc562a','每个节点的数据都是挂载到不同的机械盘上的也就是不同的分区上面的。然后就一个一个分区的挨着找，然后查看分区数量也没错，进去分区中看看昨天传送数据的时候七号分片在那个盘上面。当找到第三个分区的时候发现 明明是两个节点的数据挂在这个分区上面怎么这个分区上面有五个节点的数据，哎开始头晕啊，没办法继续找原因吧，但是发现这个分区的两个节点中有七号分片，但是一点数据都没有，又看看其它的几个数据目录是正常的，然后紧跟着查看其它分区的情况发现第四个分区也是这样的情况，感觉跟发生了灵异事件差不多，命名配置的节点数据都在指定的分区上面（就是Docker挂在不通的目录下面），如果把第三个分区和第四分区的目录调换一下就应该是正确了。但是也不能手动的移动目录吧，还得找问题出在什么地方吧。',0,0,1,'2018-01-10 18:10:59'),(67,'OpenSAML2.X 在SSO系统中的应用','60a96551681749558d9d20b925a65034','ea99bbc623ed4ee7be3f721b3120da94','用户访问SP的受保护资源，SP检查是否有用户的Session，如果用则直接访问，如果没有Session上下文SP随机生成Artifact，并生成AuthnRequest，如果在Cookie中发现票据信息，把票据信息放到AuthnRequest当中，SP建立Artifact与AuthnRequest的关联信息，SP重定向到IDP的接受Artifact接口，用Get方式发送Artifact，和SP在IDP中的注册ID，IDP接受Artifact，然后用HTTP POST方式来请求SP的getAuthnRequest接口(参数为Artifact)，SP 接受到IDP传过来的Artifact ，根据Artifact 把关联的AuthnRequest返回给IDP，IDP接受到getAuthnRequest然后来验证AuthnRequest的有效性，检查 Status Version 等信息，如果Cookie中的票据不为空，则检查票据是否正确，是否在有效期内，如果票据为空\r\n',0,0,1,'2018-01-10 18:15:04'),(68,'Spring 之 Spring Security 部署','115b51fb4a454b3194ca5fb0944e67d1','fc988c0f7aae472e8871b2f6d2b4a5ed','这个Filter顾名思义就是控制Session并发的，比如同一个用户在不同的地方登录，那么先登录的再次刷新的时候就会是无效登录。这个Filter 主要是针对CSRF攻击的，Security 4.x版本后会默认开启这个Filter，这个Filter 主要是集成SSO服务用的Filter，如果使用CAS_FILTER，和Spring Security的权限控制，就可以在这个Filter中来生成用户的登录凭证到 Spring Security Session当中去。',0,0,1,'2018-01-10 18:17:13'),(70,'OpenResty  入门开发篇（一）','e0aac8d426064c4fbaef0c2814975065','7a1c6fa14f1a4f40b137a1dbc83d783a','cd 解压路径\r\n./configure --prefix=/home/hadoop/openresty-1.11.2.1 --with-debug --with-http_ssl_module --user=hadoop\r\n#--prefix 为安装目录\r\n#--with-debug debug模式安装\r\n#如果编译不带--user的话 也可以在nginx的配置文件里面指定启动用户是那个用户，如果不指定则user为 nobody(你懂的， 启动nginx后可以用   ps -aux|grep nginx 来查看进程是那个用户启动的)\r\nmake -j2\r\nmake install\r\n至此安装成功（如果安装过程中缺少依赖包可自行下载安装依赖）',0,0,1,'2018-01-11 10:54:55'),(71,'使用dnsmasq搭建DNS服务器','18e9bd884e684a6f8c0f8d3c8d8d093f','c5d725cd42c84b0f8cdcfd623b7bdc8d','在开发过程中难免会用到DNS解析服务，比如在使用Openresty开发的过程中我们的项目都是用域名来调用服务的，但是测试环境上都只是IP地址，而且一个proxy代理了好多测试域名，这样我们就需要搭建一个测试环境的DNS解析服务器，dnsmasq很方便也很灵活的解决了这个问题',0,0,1,'2018-01-11 14:46:05'),(72,'OpenResty  入门开发篇（二）-定时任务篇','8c46deb81b084c3193f1bac3e8a10013','995dea7fd47746a3af32769e6b6d6746','本文主要介绍OpenResty中定时任务和缓存的使用，在项目开发过程中有时候会用到定时任务，比如会定时的去Redis中拉数据，定时去http接口中获取数据等等。这些场景都需要用到定时任务。',0,0,1,'2018-01-11 17:53:27'),(74,'OpenResty 入门开发篇（三）-uuid和zlib','259db89bde434e6786f4b3e4fecc4577','e54acaeb851f473d8e7619909eb82eb2','OpenResty,uuid,zlib,lua-zlib,解压缩，此篇文章主要针对OpenResty中uuid的使用以及zlib使用，uuid会有场景用到，比如生成唯一标示，广告系统中生成竞价ID等等都会用到uuid的接口。zlib主要用于在上游服务器返回到OpenResty的时候 如果是压缩的数据，那么需要解压缩，这个时候就会用到zlib',0,0,1,'2018-01-12 10:20:46');
+/*!40000 ALTER TABLE `blog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `blog_tag`
+--
+
+DROP TABLE IF EXISTS `blog_tag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `blog_tag` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `BLOG_ID` bigint(20) NOT NULL,
+  `TAG_ID` int(11) NOT NULL DEFAULT '0',
+  `CREATE_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_Reference_8` (`TAG_ID`),
+  KEY `FK_Reference_9` (`BLOG_ID`),
+  CONSTRAINT `FK_Reference_8` FOREIGN KEY (`TAG_ID`) REFERENCES `tag` (`ID`),
+  CONSTRAINT `FK_Reference_9` FOREIGN KEY (`BLOG_ID`) REFERENCES `blog` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `blog_tag`
+--
+
+LOCK TABLES `blog_tag` WRITE;
+/*!40000 ALTER TABLE `blog_tag` DISABLE KEYS */;
+INSERT INTO `blog_tag` VALUES (92,64,92,'2018-01-10 18:01:45'),(93,64,93,'2018-01-10 18:01:45'),(94,64,94,'2018-01-10 18:01:45'),(95,64,95,'2018-01-10 18:01:45'),(96,65,96,'2018-01-10 18:06:46'),(97,65,97,'2018-01-10 18:06:46'),(98,65,98,'2018-01-10 18:06:46'),(99,66,99,'2018-01-10 18:11:00'),(100,66,100,'2018-01-10 18:11:00'),(101,67,101,'2018-01-10 18:15:04'),(102,67,102,'2018-01-10 18:15:04'),(103,67,103,'2018-01-10 18:15:04'),(104,68,104,'2018-01-10 18:17:13'),(105,68,105,'2018-01-10 18:17:13'),(106,68,106,'2018-01-10 18:17:13'),(111,70,111,'2018-01-11 10:54:55'),(112,70,112,'2018-01-11 10:54:55'),(113,70,113,'2018-01-11 10:54:55'),(114,70,114,'2018-01-11 10:54:55'),(115,71,115,'2018-01-11 14:46:05'),(116,71,116,'2018-01-11 14:46:05'),(117,71,117,'2018-01-11 14:46:05'),(118,72,118,'2018-01-11 17:53:27'),(119,72,119,'2018-01-11 17:53:27'),(120,72,120,'2018-01-11 17:53:27'),(121,74,121,'2018-01-12 10:20:46'),(122,74,122,'2018-01-12 10:20:46'),(123,74,123,'2018-01-12 10:20:46'),(124,74,124,'2018-01-12 10:20:46'),(125,74,125,'2018-01-12 10:20:46');
+/*!40000 ALTER TABLE `blog_tag` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `comments` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `CREATE_USER_ID` bigint(32) NOT NULL DEFAULT '0',
+  `BLOG_ID` bigint(32) NOT NULL,
+  `PARENT_COMMENT_ID` bigint(32) DEFAULT NULL,
+  `CONTENT` varchar(2000) NOT NULL,
+  `AUTHOR` varchar(200) NOT NULL,
+  `USABLE_STATUS` int(11) NOT NULL DEFAULT '0',
+  `CREATE_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comments`
+--
+
+LOCK TABLES `comments` WRITE;
+/*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `file_manage`
+--
+
+DROP TABLE IF EXISTS `file_manage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `file_manage` (
+  `ID` varchar(36) NOT NULL,
+  `FILE_PATH` varchar(100) DEFAULT NULL,
+  `FILE_TYPE` varchar(10) DEFAULT NULL,
+  `CREATE_DATE` datetime DEFAULT NULL,
+  `NAME` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `file_manage`
+--
+
+LOCK TABLES `file_manage` WRITE;
+/*!40000 ALTER TABLE `file_manage` DISABLE KEYS */;
+INSERT INTO `file_manage` VALUES ('01dbab6d5af44158adb3999df5a7f064','D:\\home\\sunny\\soaer-files\\html\\1\\01dbab6d5af44158adb3999df5a7f064.html','html','2018-01-10 14:39:18',NULL),('02a19b61b9314ac681dc8c8dc4072c48','D:\\home\\sunny\\soaer-files\\md\\1\\02a19b61b9314ac681dc8c8dc4072c48.md','md','2018-01-10 15:52:44',NULL),('0846479389e5470fb19b0c94b76fb7e0','D:\\home\\sunny\\soaer-files\\md\\1\\0846479389e5470fb19b0c94b76fb7e0.md','md','2018-01-10 16:12:27',NULL),('115b51fb4a454b3194ca5fb0944e67d1','D:\\home\\sunny\\soaer-files\\html\\1\\115b51fb4a454b3194ca5fb0944e67d1.html','html','2018-01-10 18:15:59',NULL),('132c2d34c9524a2a82aa123fe59ce120','D:\\home\\sunny\\soaer-files\\md\\1\\132c2d34c9524a2a82aa123fe59ce120.md','md','2018-01-10 14:39:19',NULL),('183fa8f676fc4a0d8e41ba5739d6fad4','D:\\home\\sunny\\soaer-files\\html\\1\\183fa8f676fc4a0d8e41ba5739d6fad4.html','html','2018-01-11 18:20:51',NULL),('18e9bd884e684a6f8c0f8d3c8d8d093f','D:\\home\\sunny\\soaer-files\\html\\1\\18e9bd884e684a6f8c0f8d3c8d8d093f.html','html','2018-01-11 14:43:28',NULL),('259db89bde434e6786f4b3e4fecc4577','/home/sunny/soaer-files/html/1/259db89bde434e6786f4b3e4fecc4577.html','html','2018-01-12 10:19:41',NULL),('3226a98f474242b0a3278384a53fdf4f','D:\\home\\sunny\\soaer-files\\html\\1\\3226a98f474242b0a3278384a53fdf4f.html','html','2018-01-11 10:50:35',NULL),('39c6f3722e7d496a81a3da6cfc51bccf','D:\\home\\sunny\\soaer-files\\md\\1\\39c6f3722e7d496a81a3da6cfc51bccf.md','md','2018-01-11 18:20:51',NULL),('400b3a86e1a642e6ab86f68bc053da89','D:\\home\\sunny\\soaer-files\\html\\1\\400b3a86e1a642e6ab86f68bc053da89.html','html','2018-01-10 18:00:58',NULL),('4b80e1af79dd4d37be84c8ed17bcc806','D:\\home\\sunny\\soaer-files\\md\\1\\4b80e1af79dd4d37be84c8ed17bcc806.md','md','2018-01-10 14:37:43',NULL),('578b15f9e6d9458c8a6504935299a0ca','D:\\home\\sunny\\soaer-files\\md\\1\\578b15f9e6d9458c8a6504935299a0ca.md','md','2018-01-10 17:56:03',NULL),('598dd7be84c04d27aaa39cb237348ba7','D:\\home\\sunny\\soaer-files\\md\\1\\598dd7be84c04d27aaa39cb237348ba7.md','md','2018-01-11 10:50:36',NULL),('60a96551681749558d9d20b925a65034','D:\\home\\sunny\\soaer-files\\html\\1\\60a96551681749558d9d20b925a65034.html','html','2018-01-10 18:12:38',NULL),('7a1c6fa14f1a4f40b137a1dbc83d783a','D:\\home\\sunny\\soaer-files\\md\\1\\7a1c6fa14f1a4f40b137a1dbc83d783a.md','md','2018-01-11 10:54:19',NULL),('89f3df118de14cb39f7d1bbd373351e5','D:\\home\\sunny\\soaer-files\\html\\1\\89f3df118de14cb39f7d1bbd373351e5.html','html','2018-01-10 14:46:14',NULL),('8c46deb81b084c3193f1bac3e8a10013','D:\\home\\sunny\\soaer-files\\html\\1\\8c46deb81b084c3193f1bac3e8a10013.html','html','2018-01-11 17:53:00',NULL),('9268ccb0506c4f6fbcf83f3df6d118b4','D:\\home\\sunny\\soaer-files\\html\\1\\9268ccb0506c4f6fbcf83f3df6d118b4.html','html','2018-01-10 14:28:58',NULL),('987faf7ccfb446328bb288486fc0d3b1','D:\\home\\sunny\\soaer-files\\html\\1\\987faf7ccfb446328bb288486fc0d3b1.html','html','2018-01-10 18:09:44',NULL),('995dea7fd47746a3af32769e6b6d6746','D:\\home\\sunny\\soaer-files\\md\\1\\995dea7fd47746a3af32769e6b6d6746.md','md','2018-01-11 17:53:01',NULL),('9a640aa0948a4692bd55350dfa6b48b7','D:\\home\\sunny\\soaer-files\\html\\1\\9a640aa0948a4692bd55350dfa6b48b7.html','html','2018-01-10 14:37:42',NULL),('aaf096e8d922418f8a6b3fd3302b44a2','D:\\home\\sunny\\soaer-files\\html\\1\\aaf096e8d922418f8a6b3fd3302b44a2.html','html','2018-01-10 17:56:02',NULL),('b26bb6772ae04daf881a1b3156902f0e','D:\\home\\sunny\\soaer-files\\md\\1\\b26bb6772ae04daf881a1b3156902f0e.md','md','2018-01-10 18:00:59',NULL),('b7d5c73cce974833b84ef4a5b1c1c9a6','D:\\home\\sunny\\soaer-files\\html\\1\\b7d5c73cce974833b84ef4a5b1c1c9a6.html','html','2018-01-10 18:05:55',NULL),('c2318d9aa5614d27ad800f3e82bc562a','D:\\home\\sunny\\soaer-files\\md\\1\\c2318d9aa5614d27ad800f3e82bc562a.md','md','2018-01-10 18:09:45',NULL),('c2f44bd83db84da699c7e12390ac3daa','D:\\home\\sunny\\soaer-files\\md\\1\\c2f44bd83db84da699c7e12390ac3daa.md','md','2018-01-10 14:46:16',NULL),('c5d725cd42c84b0f8cdcfd623b7bdc8d','D:\\home\\sunny\\soaer-files\\md\\1\\c5d725cd42c84b0f8cdcfd623b7bdc8d.md','md','2018-01-11 14:43:27',NULL),('d41c82aad0724469b9668e14b3ea872f','D:\\home\\sunny\\soaer-files\\md\\1\\d41c82aad0724469b9668e14b3ea872f.md','md','2018-01-10 18:05:56',NULL),('e0aac8d426064c4fbaef0c2814975065','D:\\home\\sunny\\soaer-files\\html\\1\\e0aac8d426064c4fbaef0c2814975065.html','html','2018-01-11 10:54:18',NULL),('e54acaeb851f473d8e7619909eb82eb2','/home/sunny/soaer-files/md/1/e54acaeb851f473d8e7619909eb82eb2.md','md','2018-01-12 10:19:43',NULL),('e70d608b51e14f61952741f7c044de59','D:\\home\\sunny\\soaer-files\\md\\1\\e70d608b51e14f61952741f7c044de59.md','md','2018-01-10 14:28:59',NULL),('ea99bbc623ed4ee7be3f721b3120da94','D:\\home\\sunny\\soaer-files\\md\\1\\ea99bbc623ed4ee7be3f721b3120da94.md','md','2018-01-10 18:12:39',NULL),('ebf4c1fc92a942eca54e7438a6cb564a','D:\\home\\sunny\\soaer-files\\html\\1\\ebf4c1fc92a942eca54e7438a6cb564a.html','html','2018-01-10 16:12:28',NULL),('fa3afd721a83458db07bc47726b99043','D:\\home\\sunny\\soaer-files\\html\\1\\fa3afd721a83458db07bc47726b99043.html','html','2018-01-10 15:52:42',NULL),('fc988c0f7aae472e8871b2f6d2b4a5ed','D:\\home\\sunny\\soaer-files\\md\\1\\fc988c0f7aae472e8871b2f6d2b4a5ed.md','md','2018-01-10 18:16:00',NULL);
+/*!40000 ALTER TABLE `file_manage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `login_log`
+--
+
+DROP TABLE IF EXISTS `login_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `login_log` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `IP` varchar(45) NOT NULL,
+  `LOGIN_TIME` datetime DEFAULT NULL,
+  `LOGIN_DT` varchar(45) DEFAULT '',
+  `USER_ID` bigint(20) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='登录日志';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `login_log`
+--
+
+LOCK TABLES `login_log` WRITE;
+/*!40000 ALTER TABLE `login_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `login_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `resource`
+--
+
+DROP TABLE IF EXISTS `resource`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resource` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `URL` varchar(200) NOT NULL,
+  `TYPE` varchar(45) NOT NULL DEFAULT 'N/A',
+  `NAME` varchar(45) NOT NULL DEFAULT 'N/A',
+  `PARENT_ID` bigint(32) DEFAULT '0',
+  `DESCRIPTION` varchar(300) DEFAULT '',
+  `USABLE_STATUS` int(11) NOT NULL DEFAULT '1',
+  `CREATE_USER_ID` bigint(32) DEFAULT NULL,
+  `CREATE_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `url_UNIQUE` (`URL`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `resource`
+--
+
+LOCK TABLES `resource` WRITE;
+/*!40000 ALTER TABLE `resource` DISABLE KEYS */;
+INSERT INTO `resource` VALUES (1,'/user/list','1','用户列表',NULL,'获取用户列表',1,1,'2017-12-15 11:03:45'),(3,'/role/list','1','角色列表',NULL,'获取所有的角色',0,1,'2017-12-19 13:49:15'),(4,'/tag/list','1','标签列表',NULL,'获取所有的标签',0,1,'2017-12-19 14:41:53');
+/*!40000 ALTER TABLE `resource` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(45) NOT NULL,
+  `DESCRIPTION` varchar(1000) DEFAULT '',
+  `USABLE_STATUS` int(11) NOT NULL DEFAULT '0',
+  `CREATE_USER_ID` bigint(32) NOT NULL DEFAULT '0',
+  `CREATE_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `name_UNIQUE` (`NAME`),
+  KEY `role_name` (`NAME`),
+  KEY `role_create_user_id` (`CREATE_USER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (1,'ROLE_ADMIN','管理员',1,1,'2017-12-19 09:49:31'),(2,'ROLE_USER','普通用户',1,1,'2017-12-19 09:50:28');
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role_resource`
+--
+
+DROP TABLE IF EXISTS `role_resource`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role_resource` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `ROLE_ID` bigint(32) NOT NULL DEFAULT '0',
+  `RESOURCE_ID` bigint(32) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `FK_ROLE_RESOURCE_R` (`RESOURCE_ID`),
+  KEY `FK_R_R_R` (`ROLE_ID`),
+  CONSTRAINT `FK_ROLE_RESOURCE_R` FOREIGN KEY (`RESOURCE_ID`) REFERENCES `resource` (`ID`),
+  CONSTRAINT `FK_R_R_R` FOREIGN KEY (`ROLE_ID`) REFERENCES `role` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role_resource`
+--
+
+LOCK TABLES `role_resource` WRITE;
+/*!40000 ALTER TABLE `role_resource` DISABLE KEYS */;
+INSERT INTO `role_resource` VALUES (2,2,1),(3,2,4),(4,1,4),(5,1,1),(7,1,3),(8,1,4);
+/*!40000 ALTER TABLE `role_resource` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role_user`
+--
+
+DROP TABLE IF EXISTS `role_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role_user` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `USER_ID` bigint(32) NOT NULL DEFAULT '0',
+  `ROLE_ID` bigint(32) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `FK_ROLE_USER` (`USER_ID`),
+  KEY `FK_ROLE_USER_R` (`ROLE_ID`),
+  CONSTRAINT `FK_ROLE_USER` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`ID`),
+  CONSTRAINT `FK_ROLE_USER_R` FOREIGN KEY (`ROLE_ID`) REFERENCES `role` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role_user`
+--
+
+LOCK TABLES `role_user` WRITE;
+/*!40000 ALTER TABLE `role_user` DISABLE KEYS */;
+INSERT INTO `role_user` VALUES (1,1,1);
+/*!40000 ALTER TABLE `role_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tag`
+--
+
+DROP TABLE IF EXISTS `tag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tag` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(45) NOT NULL,
+  `USABLE_STATUS` int(11) NOT NULL DEFAULT '0',
+  `CREATE_USER_ID` bigint(32) NOT NULL DEFAULT '0',
+  `CREATE_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tag`
+--
+
+LOCK TABLES `tag` WRITE;
+/*!40000 ALTER TABLE `tag` DISABLE KEYS */;
+INSERT INTO `tag` VALUES (92,'docker',0,1,'2018-01-10 18:01:45'),(93,'Elasticsearch',0,1,'2018-01-10 18:01:45'),(94,'weave',0,1,'2018-01-10 18:01:45'),(95,'集群',0,1,'2018-01-10 18:01:45'),(96,'Elasticsearch',0,1,'2018-01-10 18:06:46'),(97,'重建索引',0,1,'2018-01-10 18:06:46'),(98,'es',0,1,'2018-01-10 18:06:46'),(99,'Elasticsearch',0,1,'2018-01-10 18:11:00'),(100,'磁盘错乱',0,1,'2018-01-10 18:11:00'),(101,'OpenSaml',0,1,'2018-01-10 18:15:04'),(102,'java',0,1,'2018-01-10 18:15:04'),(103,'SSO',0,1,'2018-01-10 18:15:04'),(104,'Spring',0,1,'2018-01-10 18:17:13'),(105,'Spring Security',0,1,'2018-01-10 18:17:13'),(106,'CSRF',0,1,'2018-01-10 18:17:13'),(107,'Openresty',0,1,'2018-01-11 10:51:19'),(108,'入门',0,1,'2018-01-11 10:51:19'),(109,'lua',0,1,'2018-01-11 10:51:19'),(110,'nginx',0,1,'2018-01-11 10:51:19'),(111,'nginx',0,1,'2018-01-11 10:54:55'),(112,'openresty',0,1,'2018-01-11 10:54:55'),(113,'lua',0,1,'2018-01-11 10:54:55'),(114,'入门',0,1,'2018-01-11 10:54:55'),(115,'DNS',0,1,'2018-01-11 14:46:05'),(116,'dnsmasq',0,1,'2018-01-11 14:46:05'),(117,'nginx',0,1,'2018-01-11 14:46:05'),(118,'OpenResty',0,1,'2018-01-11 17:53:27'),(119,'定时任务',0,1,'2018-01-11 17:53:27'),(120,'timer',0,1,'2018-01-11 17:53:27'),(121,'OpenResty',0,1,'2018-01-12 10:20:46'),(122,'uuid',0,1,'2018-01-12 10:20:46'),(123,'zlib',0,1,'2018-01-12 10:20:46'),(124,'lua-zlib',0,1,'2018-01-12 10:20:46'),(125,'解压缩',0,1,'2018-01-12 10:20:46');
+/*!40000 ALTER TABLE `tag` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `ID` bigint(32) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(200) NOT NULL,
+  `IMG_PATH` varchar(100) DEFAULT '',
+  `PASSWORD` varchar(100) NOT NULL,
+  `EMAIL` varchar(45) NOT NULL,
+  `PHONE` varchar(45) DEFAULT '',
+  `ADDRESS` varchar(200) DEFAULT '',
+  `LOGIN_SUM` int(11) NOT NULL DEFAULT '0',
+  `LAST_LOGIN_IP` varchar(100) NOT NULL DEFAULT 'N/A',
+  `CREATE_DATE` datetime DEFAULT NULL,
+  `USABLE_STATUS` int(11) NOT NULL DEFAULT '1' COMMENT '0：可用\n            1：不可用',
+  `MODIFY_DATE` datetime DEFAULT NULL,
+  `TOKEN` varchar(50) DEFAULT '',
+  `LOGIN_TYPE` int(11) NOT NULL DEFAULT '0' COMMENT '1：用户名密码登陆\n            2：QQ登录\n            3：微信登录',
+  `LAST_LOGIN_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `email_UNIQUE` (`EMAIL`),
+  UNIQUE KEY `name_UNIQUE` (`NAME`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'Sunny',NULL,'36CD542023508C2371FC7FA350A46FA3','lzxlxw@163.com',NULL,'北京市海淀区上庄水库',0,'192.168.1.1','2017-12-15 10:50:23',0,NULL,NULL,0,'2017-12-15 10:50:23');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping events for database 'sms'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-01-12 11:03:30
