@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.sms.project.access.dao.AccessDao" >
+  <resultMap id="BaseResultMap" type="org.sms.project.access.entity.Access" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="IP" property="ip" jdbcType="VARCHAR" />
+    <result column="DOMAIN" property="domain" jdbcType="VARCHAR" />
+    <result column="PATH" property="path" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="BIGINT" />
+    <result column="BLOG_ID" property="blogId" jdbcType="BIGINT" />
+    <result column="HTML_ID" property="htmlId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CREATE_DATE, IP, DOMAIN, PATH, USER_ID, BLOG_ID, HTML_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from access
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from access
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="org.sms.project.access.entity.Access" >
+    insert into access (ID, CREATE_DATE, IP, 
+      DOMAIN, PATH, USER_ID, 
+      BLOG_ID, HTML_ID)
+    values (#{id,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{ip,jdbcType=VARCHAR}, 
+      #{domain,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
+      #{blogId,jdbcType=BIGINT}, #{htmlId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.sms.project.access.entity.Access" >
+    insert into access
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="ip != null" >
+        IP,
+      </if>
+      <if test="domain != null" >
+        DOMAIN,
+      </if>
+      <if test="path != null" >
+        PATH,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="blogId != null" >
+        BLOG_ID,
+      </if>
+      <if test="htmlId != null" >
+        HTML_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="domain != null" >
+        #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="blogId != null" >
+        #{blogId,jdbcType=BIGINT},
+      </if>
+      <if test="htmlId != null" >
+        #{htmlId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.sms.project.access.entity.Access" >
+    update access
+    <set >
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ip != null" >
+        IP = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="domain != null" >
+        DOMAIN = #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        PATH = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="blogId != null" >
+        BLOG_ID = #{blogId,jdbcType=BIGINT},
+      </if>
+      <if test="htmlId != null" >
+        HTML_ID = #{htmlId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.sms.project.access.entity.Access" >
+    update access
+    set CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      IP = #{ip,jdbcType=VARCHAR},
+      DOMAIN = #{domain,jdbcType=VARCHAR},
+      PATH = #{path,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=BIGINT},
+      BLOG_ID = #{blogId,jdbcType=BIGINT},
+      HTML_ID = #{htmlId,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
