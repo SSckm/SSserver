@@ -313,17 +313,17 @@ public class BlogServiceImpl implements BlogService {
 		
 		if (blogs.size() == 1) {
 			Element recommended1 = docTemplate.getElementsByAttributeValue("id","recommended1").first();
-			recommended1.attr("href", "http://blog.soaer.com/1/" + blogs.get(0).getHtmlFileId() + ".html");
+			recommended1.attr("href", "https://blog.soaer.com/1/" + blogs.get(0).getHtmlFileId() + ".html");
 			recommended1.text(blogs.get(0).getTitle());
 			return;
 		}
 		
 		Element recommended1 = docTemplate.getElementsByAttributeValue("id","recommended1").first();
-		recommended1.attr("href", "http://blog.soaer.com/1/" + blogs.get(0).getHtmlFileId() + ".html");
+		recommended1.attr("href", "https://blog.soaer.com/1/" + blogs.get(0).getHtmlFileId() + ".html");
 		recommended1.text(blogs.get(0).getTitle());
 		
 		Element recommended2 = docTemplate.getElementsByAttributeValue("id","recommended2").first();
-		recommended2.attr("href", "http://blog.soaer.com/1/" + blogs.get(1).getHtmlFileId() + ".html");
+		recommended2.attr("href", "https://blog.soaer.com/1/" + blogs.get(1).getHtmlFileId() + ".html");
 		recommended2.text(blogs.get(1).getTitle());
 		return;
 	}
@@ -422,7 +422,7 @@ public class BlogServiceImpl implements BlogService {
 				return resAdd;
 			}
 			resAdd.setCode(1);
-			resAdd.setUrl("http://soaer.com/" + id + "." + suffix);
+			resAdd.setUrl("https://soaer.com/" + id + "." + suffix);
 			resAdd.setName(sourceFileName);
 			resAdd.setError("添加成功");
 			resAdd.setId(id);
